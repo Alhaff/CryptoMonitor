@@ -7,21 +7,35 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:vms="clr-namespace:CryptoMonitor.ViewModels"
         xmlns:views="clr-namespace:CryptoMonitor.Views"
+        xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
         Title="Crypto Monitor" Height="450" Width="800">
-    <Grid>
+    <Grid Background="{Binding ThemeColor}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ui:TitleBar Grid.Row="0">
-            <ui:TitleBar.Header>
-                <TextBlock FontSize="14" VerticalAlignment="Center">Crypto Monitor</TextBlock>
-            </ui:TitleBar.Header>
+        <ui:TitleBar Grid.Row="0" Icon="{Binding IconPath}"
+                     Title="Crypto Monitor">
         </ui:TitleBar>
         <Grid Grid.Row="1">
+            <ToggleButton>
+                <behaviours:Interaction.Triggers>
+                    <behaviours:EventTrigger EventName="Checked">
+                        <behaviours:InvokeCommandAction Command="{Binding ApplyLightTheme}"
+                                                    PassEventArgsToCommand="True"/>
+                    </behaviours:EventTrigger>
+                    <behaviours:EventTrigger EventName="Unchecked">
+                        <behaviours:InvokeCommandAction Command="{Binding ApplyDarkTheme}"
+                                                    PassEventArgsToCommand="True"/>
+                    </behaviours:EventTrigger>
+                </behaviours:Interaction.Triggers>
+            </ToggleButton>
+        </Grid>
+        <Grid Grid.Row="2">
             <ContentControl Content="{Binding Navigation.CurrentView}" />
         </Grid>
         
