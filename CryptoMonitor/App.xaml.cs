@@ -8,6 +8,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui.Mvvm.Services;
 
 namespace CryptoMonitor
 {
