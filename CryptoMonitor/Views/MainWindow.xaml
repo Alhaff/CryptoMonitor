@@ -5,10 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoMonitor"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:vms="clr-namespace:CryptoMonitor.ViewModels"
+        xmlns:views="clr-namespace:CryptoMonitor.Views"
         mc:Ignorable="d"
         WindowStyle="None"
+        AllowsTransparency="True"
         Title="Crypto Monitor" Height="450" Width="800">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ui:TitleBar Grid.Row="0">
+            <ui:TitleBar.Header>
+                <TextBlock FontSize="14" VerticalAlignment="Center">Crypto Monitor</TextBlock>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding Navigation.CurrentView}" />
+        </Grid>
+        
     </Grid>
 </ui:UiWindow>
