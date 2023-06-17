@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
+using CryptoMonitor.ViewModels;
 
 namespace CryptoMonitor
 {
@@ -29,8 +30,17 @@ namespace CryptoMonitor
         private void ConfigureServices(IConfiguration configuration,
             IServiceCollection services)
         {
-            // ...
-            services.AddSingleton<MainWindow>();
+            services.AddSingleton<Func<Type, ViewModelBase>>(provider => 
+                viewModelType => (ViewModelBase)provider.GetRequiredService(viewModelType));
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<Top10CoinViewModel>();
+            services.AddSingleton<MainWindow>(provider => 
+            new MainWindow 
+            { 
+                DataContext = provider.GetRequiredService<MainWindowViewModel>() 
+            });
+            services.AddSingleton<Services.INavigationService, Services.NavigationService>();
+            services.AddSingleton<IThemeService,ThemeService>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)
