@@ -11,6 +11,7 @@ using System.Windows;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
 using CryptoMonitor.ViewModels;
+using CryptoMonitor.Services;
 
 namespace CryptoMonitor
 {
@@ -34,6 +35,7 @@ namespace CryptoMonitor
                 viewModelType => (ViewModelBase)provider.GetRequiredService(viewModelType));
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<Top10CoinViewModel>();
+            services.AddSingleton<CoinGeckoApiService>();
             services.AddSingleton<MainWindow>(provider => 
             new MainWindow 
             { 
@@ -41,6 +43,7 @@ namespace CryptoMonitor
             });
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<IThemeService,ThemeService>();
+            services.AddHttpClient();
         }
 
         protected override async void OnStartup(StartupEventArgs e)
