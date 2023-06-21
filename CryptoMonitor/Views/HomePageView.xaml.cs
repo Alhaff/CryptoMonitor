@@ -18,9 +18,9 @@ namespace CryptoMonitor.Views
     /// <summary>
     /// Interaction logic for Top10CoinView.xaml
     /// </summary>
-    public partial class Top10CoinView : UserControl
+    public partial class HomePageView : UserControl
     {
-        public Top10CoinView()
+        public HomePageView()
         {
             InitializeComponent();
         }
