@@ -12,7 +12,14 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Title="Crypto Monitor" Height="450" Width="800">
-    <Grid Background="{Binding ThemeColor}">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid Background="{Binding ThemeColor}" >
+        <behaviours:Interaction.Triggers>
+            <behaviours:EventTrigger EventName="Loaded">
+                <behaviours:InvokeCommandAction Command="{Binding OnLoaded}"/>
+            </behaviours:EventTrigger>
+        </behaviours:Interaction.Triggers>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -21,23 +28,102 @@
         <ui:TitleBar Grid.Row="0" Icon="{Binding IconPath}"
                      Title="Crypto Monitor">
         </ui:TitleBar>
-        <Grid Grid.Row="1">
-            <ToggleButton>
-                <behaviours:Interaction.Triggers>
-                    <behaviours:EventTrigger EventName="Checked">
-                        <behaviours:InvokeCommandAction Command="{Binding ApplyLightTheme}"
+        <Grid Grid.Row="1" Margin="10 0 20 0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.Column="0" Orientation="Horizontal">
+                <ui:Button VerticalAlignment="Stretch" Command="{Binding NavigateToHomePage}">
+                    <ui:SymbolIcon Symbol="Home24"/>
+                </ui:Button>
+
+                <ToggleButton Margin="10 0" VerticalAlignment="Stretch">
+                    <behaviours:Interaction.Triggers>
+                        <behaviours:EventTrigger EventName="Checked">
+                            <behaviours:InvokeCommandAction Command="{Binding ApplyLightTheme}"
                                                     PassEventArgsToCommand="True"/>
-                    </behaviours:EventTrigger>
-                    <behaviours:EventTrigger EventName="Unchecked">
-                        <behaviours:InvokeCommandAction Command="{Binding ApplyDarkTheme}"
+                        </behaviours:EventTrigger>
+                        <behaviours:EventTrigger EventName="Unchecked">
+                            <behaviours:InvokeCommandAction Command="{Binding ApplyDarkTheme}"
                                                     PassEventArgsToCommand="True"/>
-                    </behaviours:EventTrigger>
-                </behaviours:Interaction.Triggers>
-            </ToggleButton>
+                        </behaviours:EventTrigger>
+                    </behaviours:Interaction.Triggers>
+                    <ui:SymbolIcon Symbol="DarkTheme20"/>
+                </ToggleButton>
+            </StackPanel>
+           
+            <StackPanel  Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+               
+                <ComboBox ItemsSource="{Binding Currencies}"  SelectedItem="{Binding CoinGeckoApi.CurrentCurrency}"></ComboBox>
+
+
+                <!--<ui:AutoSuggestBox Margin="10,0,0,0"
+                                   Width="500"
+                                   VerticalAlignment="Stretch"
+                                   PlaceholderText="Search cryptocurrencies"
+                                   ItemsSource="{Binding NameSymbolCoins, Mode=OneWay}">
+                    <behaviours:Interaction.Triggers>
+                        <behaviours:EventTrigger EventName="SuggestionChosen">
+                            <behaviours:InvokeCommandAction Command="{Binding OnCoinChosen}"/>
+                        </behaviours:EventTrigger>
+                        <behaviours:EventTrigger EventName="QuerySubmitted">
+                            <behaviours:InvokeCommandAction Command="{Binding OnQuerySubmited}"
+                                                            CommandParameter="{Binding Text, 
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ui:AutoSuggestBox}}"
+                                                            />
+                        </behaviours:EventTrigger>
+                    </behaviours:Interaction.Triggers>
+
+
+                </ui:AutoSuggestBox>-->
+
+                <Grid Margin="10 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBox Visibility="Collapsed" Grid.Column="0" MinWidth="200"  Text="{Binding Text, ElementName=SearchField}">
+                        <behaviours:Interaction.Triggers>
+                            <behaviours:EventTrigger EventName="TextChanged">
+                                <behaviours:InvokeCommandAction Command="{Binding OnSearch}"
+                                                                CommandParameter="{Binding Text, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ui:TextBox}}">
+
+                                </behaviours:InvokeCommandAction>
+                            </behaviours:EventTrigger>
+                        </behaviours:Interaction.Triggers>
+                    </ui:TextBox>
+                    <ComboBox x:Name="SearchField"
+                        VerticalAlignment="Stretch"
+                       Grid.Column="0" MinWidth="300"
+                        ItemsSource="{Binding NameSymbolCoins}"
+                        IsEditable="True"
+                        SelectedValuePath="NameSymbol"
+                        IsDropDownOpen="{Binding SearchFieldDropDown}"
+                        SelectedItem="{Binding SelectedCoinBySearch}"
+                        >
+                    </ComboBox>
+                    <ui:Button Grid.Column="2" VerticalAlignment="Stretch"
+                            Command="{Binding GoToCoinPage}">
+                        <ui:SymbolIcon Symbol="Open28"/>
+                    </ui:Button>
+                </Grid>
+
+            </StackPanel>
+           
         </Grid>
-        <Grid Grid.Row="2">
+        <ScrollViewer Margin="10 20 10 0" Grid.Row="2" VerticalScrollBarVisibility="visible" HorizontalScrollBarVisibility="Disabled">
+            <behaviours:Interaction.Triggers>
+                <behaviours:EventTrigger EventName="Loaded">
+                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding LoadScroll }"/>
+                </behaviours:EventTrigger>
+            </behaviours:Interaction.Triggers>
+            <Grid Grid.Row="2">
             <ContentControl Content="{Binding Navigation.CurrentView}" />
         </Grid>
+        </ScrollViewer>
         
     </Grid>
 </ui:UiWindow>

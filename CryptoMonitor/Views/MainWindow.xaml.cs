@@ -24,6 +24,7 @@ namespace CryptoMonitor
         public MainWindow()
         {
             InitializeComponent();
+           
         }
     }
 }
