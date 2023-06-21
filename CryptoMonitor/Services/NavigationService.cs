@@ -1,10 +1,12 @@
-﻿using CryptoMonitor.Core;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CryptoMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using Wpf.Ui.Mvvm.Interfaces;
 
 namespace CryptoMonitor.Services
 {
@@ -13,7 +15,10 @@ namespace CryptoMonitor.Services
     {
         ViewModelBase CurrentView { get; }
 
+        public ViewModelBase PrevView { get; set; }
+
         void NavigateTo<T>() where T : ViewModelBase;
+        void NavigateBack();
     }
     public class NavigationService : ObservableObject, INavigationService
     {
@@ -38,9 +43,29 @@ namespace CryptoMonitor.Services
         {
             _viewModelFactory = viewModelFactory;
         }
+        private ViewModelBase _prevView;
+        public ViewModelBase PrevView
+        {
+            get
+            {
+                return _prevView;
+            }
+            set
+            {
+                _prevView = value;
+                OnPropertyChanged(nameof(PrevView));
+            }
+        }
         public void NavigateTo<TViewModel>() where TViewModel : ViewModelBase
         {
+            PrevView = CurrentView;
             var model = _viewModelFactory.Invoke(typeof(TViewModel));
+            CurrentView = model;
+        }
+
+        public void NavigateBack()
+        {
+            var model = _viewModelFactory.Invoke(PrevView.GetType());
             CurrentView = model;
         }
     }
