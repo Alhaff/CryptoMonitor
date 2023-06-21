@@ -124,6 +124,7 @@ namespace CryptoMonitor.ViewModels
                     Page += 1;
                     CoinData.Tickers = await CoinGeckoApi.GetCoinTickers(CoinGeckoApi.CurrentCoinId, Page);
                     OnPropertyChanged(nameof(CoinData));
+                    ScrollService.ScrollViewer.ScrollToTop();
                 }
                 catch (Exception ex)
                 {
@@ -146,6 +147,7 @@ namespace CryptoMonitor.ViewModels
                     Page -= 1;
                     CoinData.Tickers = await CoinGeckoApi.GetCoinTickers(CoinGeckoApi.CurrentCoinId, Page);
                     OnPropertyChanged(nameof(CoinData));
+                    ScrollService.ScrollViewer.ScrollToTop();
                 }
                 catch (Exception ex)
                 {
