@@ -34,15 +34,20 @@ namespace CryptoMonitor
             services.AddSingleton<Func<Type, ViewModelBase>>(provider => 
                 viewModelType => (ViewModelBase)provider.GetRequiredService(viewModelType));
             services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<Top10CoinViewModel>();
+            services.AddSingleton<HomePageViewModel>();
+            services.AddTransient<ErrorPageViewModel>();
+            services.AddScoped<CoinDataViewModel>();
+            services.AddSingleton<ScrollService>();
             services.AddSingleton<CoinGeckoApiService>();
-            services.AddSingleton<MainWindow>(provider => 
+            services.AddSingleton(provider => 
             new MainWindow 
             { 
                 DataContext = provider.GetRequiredService<MainWindowViewModel>() 
             });
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<IThemeService,ThemeService>();
+            services.AddSingleton<ErrorService>();
+            services.AddSingleton<CoinCapApiService>();
             services.AddHttpClient();
         }
 
