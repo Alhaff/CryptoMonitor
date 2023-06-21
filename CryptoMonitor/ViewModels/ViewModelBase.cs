@@ -1,4 +1,4 @@
-﻿using CryptoMonitor.Core;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
