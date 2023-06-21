@@ -1,0 +1,251 @@
+﻿<UserControl x:Class="CryptoMonitor.Views.HomePageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:converters="clr-namespace:CryptoMonitor.Converters"
+             xmlns:models="clr-namespace:CryptoMonitor.Models.CoinGecko"
+             xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:PercentChangeColorSelector x:Key="PercentColorSelector"/>
+    </UserControl.Resources>
+    <Grid>
+        <behaviours:Interaction.Triggers>
+            <behaviours:EventTrigger EventName="Loaded">
+                <behaviours:InvokeCommandAction Command="{Binding OnLoaded}"/>
+            </behaviours:EventTrigger>
+        </behaviours:Interaction.Triggers>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <ui:Card x:Name="Card1" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0">
+                <Grid  HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="https://www.dbs.com.sg/iwov-resources/media/images/nav/beginners-guide-to-cryptocurrency/beginners-guide-to-cryptocurrency-1404x630.jpg"></Image>
+                    <TextBlock TextWrapping="Wrap" Grid.Column="2"  FontSize="24">
+                        <Run FontSize="30" FontWeight="Bold" 
+                             Text="Welcome to Crypto Monitor!"/>
+                        <LineBreak/>
+                        <Run>
+                            Here you can discover the exciting world of cryptocurrencies
+                            and stay up-to-date with real-time market data,
+                            which was powered by  
+                        </Run>
+                        <Hyperlink Foreground="White" FontWeight="Bold" TextDecorations="None" 
+                                   NavigateUri="https://apiguide.coingecko.com/getting-started/introduction"
+                                   >
+                            GryptoGeckoAPI
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="MouseEnter">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding MouseEnterHyperLink}"/>
+                                </behaviours:EventTrigger>
+                                 <behaviours:EventTrigger EventName="MouseLeave">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding MouseLeaveHyperLink}"/>
+                                </behaviours:EventTrigger>
+                                 <behaviours:EventTrigger EventName="RequestNavigate">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding HyperlinkNavigate}"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </Hyperlink>
+                        and
+                         <Hyperlink Foreground="White"  FontWeight="Bold" TextDecorations="None" NavigateUri="https://docs.coincap.io/">
+                            CoinCapApi
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="MouseEnter">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding MouseEnterHyperLink}"/>
+                                </behaviours:EventTrigger>
+                                 <behaviours:EventTrigger EventName="MouseLeave">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding MouseLeaveHyperLink}"/>
+                                </behaviours:EventTrigger>
+                                  <behaviours:EventTrigger EventName="RequestNavigate">
+                                    <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding HyperlinkNavigate}"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </Hyperlink>.
+                         <LineBreak/>
+                        We are supported:
+                        <Run Text="{Binding GlobalInfo.ActiveCryptocurrencies}"/> coins and 
+                        <Run Text="{Binding GlobalInfo.Markets}"/> exchanges.
+                    </TextBlock>
+                </Grid>
+
+            </ui:Card>
+            <ui:Card x:Name="Card2" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" FontSize="24" FontWeight="Bold">
+                       Global Market data
+                    </TextBlock>
+                    <TextBlock Margin="0 5" Grid.Column="2"   FontSize="18">
+                        <Run FontSize="20" FontWeight="Bold" Text="Market Cap:"></Run> 
+                        <Run Text="{Binding GlobalInfo.TotalMarketCap, StringFormat={}{0:C}}"></Run>
+                    </TextBlock>
+                    <TextBlock  Margin="0 5" Grid.Column="3"   FontSize="18">
+                        <Run FontSize="20" FontWeight="Bold" Text="Total Volume:"></Run> 
+                        <Run Text="{Binding GlobalInfo.TotalVolume, StringFormat={}{0:C}}"></Run>
+                    </TextBlock>
+                    <TextBlock  Margin="0 5" Grid.Column="3"   FontSize="18">
+                        <Run FontSize="20" FontWeight="Bold" Text="Upcoming icos:"></Run> 
+                        <Run Text="{Binding GlobalInfo.UpcomingICOs}"></Run>
+                    </TextBlock>
+                    <TextBlock  Margin="0 5" Grid.Column="3"   FontSize="18">
+                        <Run FontSize="20" FontWeight="Bold" Text="Ongoing icos:"></Run> 
+                        <Run Text="{Binding GlobalInfo.OngoingICOs}"></Run>
+                    </TextBlock>
+                    <TextBlock  Margin="0 5" Grid.Column="3"   FontSize="18">
+                        <Run FontSize="20" FontWeight="Bold" Text="Ended icos:"></Run> 
+                        <Run Text="{Binding GlobalInfo.EndedICOs}"></Run>
+                    </TextBlock>
+                </StackPanel>
+            </ui:Card>
+
+            <ui:Card x:Name="Card3" VerticalAlignment="Top"  Grid.Row="2" Grid.ColumnSpan="3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Margin="0,0,0,20"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Text="Cryptocurrency by Market Cap in USD (CoinCap)"/>
+                    <StackPanel Grid.Row="1">
+                    <ui:DataGrid Grid.Row="1"
+                                 CanUserAddRows="False"
+                                 CanUserDeleteRows="False"
+                                 CanUserReorderColumns="False"
+                                 AutoGenerateColumns="False"
+                                 GridLinesVisibility="Horizontal"
+                                 ItemsSource="{Binding CoinAssets, Mode=OneWay}"
+                        
+                                 >
+                        <behaviours:Interaction.Triggers>
+                            <behaviours:EventTrigger EventName="PreviewMouseWheel">
+                                <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding Scroll}"/>
+                            </behaviours:EventTrigger>
+                        </behaviours:Interaction.Triggers>
+                        <ui:DataGrid.Columns>
+                            <DataGridTextColumn Width="40"  Header="#" Binding="{Binding Rank}"/>
+                            <DataGridTemplateColumn Width="300" SortMemberPath="Name" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Name"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ui:Button  HorizontalAlignment="Center"
+                                                   Background="Transparent"
+                                                   BorderThickness="0"
+                                                    Command="{Binding DataContext.NavigateToCoinPage,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding Symbol}">
+                                            <TextBlock>
+                                                <Run FontFamily="Italic"  FontSize="18" FontWeight="Bold" Text="{Binding Name}"/>
+                                                <Run FontSize="15" Text="{Binding Symbol}"/>
+                                            </TextBlock>
+                                        </ui:Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="150" SortMemberPath="Price" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Price"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" 
+                                                   Text="{Binding PriceUsd, StringFormat={}{0:C}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="100" SortMemberPath="ChangePercent24Hr" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="24 Hr"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" 
+                                                   Text="{Binding ChangePercent24Hr, StringFormat={}{0:f3}%}"
+                                                   Foreground="{Binding ChangePercent24Hr, Converter={StaticResource PercentColorSelector}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="150" SortMemberPath="VolumeUsd24Hr" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Volume 24 Hr"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" 
+                                                   Text="{Binding VolumeUsd24Hr, StringFormat={}{0:C3}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="200" SortMemberPath="MarketCap" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Mkt Cap"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding MarketCapUsd, StringFormat={}{0:C}}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="400" SortMemberPath="MarketCapPercent" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Mkt Cap Percent"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid >
+                                            <ProgressBar Height="15" IsIndeterminate="False" Maximum="100" Value="{Binding MarketCapPercent, Mode=OneWay}"></ProgressBar>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       HorizontalAlignment="Right"
+                                                       Text="{Binding MarketCapPercent, StringFormat={}{0:f2}%}">
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </ui:DataGrid.Columns>
+                    </ui:DataGrid>
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Grid.Row="2"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center">
+                        <ui:Button Command="{Binding PrevCoinsPage}">
+                            <ui:SymbolIcon Symbol="ChevronLeft24"/>
+                        </ui:Button>
+                        <TextBlock VerticalAlignment="Center" FontSize="20" Margin="10 0" Text="{Binding Page}"></TextBlock>
+                        <ui:Button Command="{Binding NextCoinsPage}">
+                            <ui:SymbolIcon Symbol="ChevronRight24"/>
+                        </ui:Button>
+                    </StackPanel>
+                </Grid>
+            </ui:Card>
+        </Grid>
+    </Grid>
+</UserControl>
