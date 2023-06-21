@@ -141,6 +141,7 @@ namespace CryptoMonitor.ViewModels
                 {
                     Page += 1;
                     CoinAssets = await CoinCapApi.GetCoinsAssets(Page);
+                    ScrollService.ScrollViewer.ScrollToTop();
                 }
                 catch(Exception ex) 
                 {
@@ -160,10 +161,9 @@ namespace CryptoMonitor.ViewModels
             {
                 try
                 {
-
-               
-                Page -= 1;
-                CoinAssets = await CoinCapApi.GetCoinsAssets(Page);
+                    Page -= 1;
+                    CoinAssets = await CoinCapApi.GetCoinsAssets(Page);
+                    ScrollService.ScrollViewer.ScrollToTop();
                 }
                 catch(Exception ex)
                 {
