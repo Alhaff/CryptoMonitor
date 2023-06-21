@@ -1,0 +1,478 @@
+﻿<UserControl x:Class="CryptoMonitor.Views.CoinDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CryptoMonitor.Views"
+             xmlns:models="clr-namespace:CryptoMonitor.Models.CoinGecko"
+             xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+              xmlns:converters="clr-namespace:CryptoMonitor.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:PercentChangeColorSelector x:Key="PercentColorSelector"/>
+        <converters:CoinLinksStringArrConverter x:Key="StringArrConvert" />
+        <converters:UrlSiteConverter x:Key="UrlConverter" />
+        <converters:BigMoneyValueConverter x:Key="BigMoneyConvertor"/>
+    </UserControl.Resources>
+    <Grid>
+        <behaviours:Interaction.Triggers>
+            <behaviours:EventTrigger EventName="Loaded">
+                <behaviours:InvokeCommandAction Command="{Binding OnLoaded}"/>
+            </behaviours:EventTrigger>
+        </behaviours:Interaction.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" 
+                  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ui:Card  Grid.Column="0" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Image Source="{Binding CoinData.Image.Small}" />
+                        <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
+                            <Run FontSize="48" FontWeight="Bold"  Text="{Binding CoinData.Name}"></Run>
+                            <Run FontSize="24" Text="{Binding CoinData.Symbol}"></Run>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock>
+                             <Run FontSize="40" FontWeight="Bold" 
+                                  Text="{Binding CoinMarket.CurrentPrice, Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                             <Run FontSize="40" 
+                                 Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>    
+                        </TextBlock>
+                        <TextBlock Margin="4 0" VerticalAlignment="Center">
+                            <Run FontSize="25" 
+                                     Text="{Binding CoinMarket.PriceChange1h, StringFormat={}{0:F2}%, Mode=OneWay}"
+                                     Foreground="{Binding CoinMarket.PriceChange1h,
+                                                  Converter={StaticResource PercentColorSelector}}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <Grid Grid.Row="2" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                       
+                    <ProgressBar Grid.Row="0" IsIndeterminate="False" 
+                                 Minimum="{Binding CoinMarket.LowPrice24h}"
+                                 Maximum="{Binding CoinMarket.HighPrice24h}"
+                                 Value="{Binding CoinMarket.CurrentPrice, Mode=OneWay}"
+                                 >
+                        
+                    </ProgressBar>
+                        <TextBlock FontSize="20"  Grid.Row="1" HorizontalAlignment="Left">
+                              <Run  
+                                  Text="{Binding CoinMarket.LowPrice24h, Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                             <Run
+                                 Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>
+                        </TextBlock>
+                        <TextBlock FontSize="20" Grid.Row="1" HorizontalAlignment="Center"  Text="24H Range"/>
+                        <TextBlock FontSize="20" Grid.Row="1" HorizontalAlignment="Right">
+                             <Run  
+                                  Text="{Binding CoinMarket.HighPrice24h, Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                             <Run
+                                 Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>
+                        </TextBlock>
+                    </Grid>
+                    
+                    <Grid Margin="0 10" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ui:Card Grid.Row="0" Grid.Column="0" FontSize="20">
+                            <Grid  HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Market Cap:"/>
+                                <TextBlock Grid.Column="2"  HorizontalAlignment="Right">
+                                 <Run Text="{Binding CoinMarket.MarketCap, Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                                <Run Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>
+                                </TextBlock>
+                            </Grid>
+                        </ui:Card>
+                        <ui:Card Grid.Row="2" Grid.Column="0"  FontSize="20">
+                        <Grid  HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left"  Text="24 Hour Trading Vol:"/>
+                            <TextBlock Grid.Column="2" HorizontalAlignment="Right">
+                                 <Run Text="{Binding CoinMarket.TotalVolume,Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                                <Run Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>
+                            </TextBlock>
+                        </Grid>
+                        </ui:Card>
+                        <ui:Card Grid.Row="4" Grid.Column="0" FontSize="20">
+                            <Grid  HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Fully Diluted Valuation:"/>
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right">
+                                 <Run Text="{Binding CoinMarket.FullyDilutedValuation, Converter={StaticResource BigMoneyConvertor}, Mode=OneWay}"/>
+                                <Run Text="{Binding CoinMarket.Currency, Mode=OneWay}"/>
+                                </TextBlock>
+                            </Grid>
+                        </ui:Card>
+                        <ui:Card Grid.Row="0" Grid.Column="2" FontSize="20">
+                            <Grid  HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Circulating Supply:"/>
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right"
+                                           Text="{Binding CoinMarket.CirculatingSupply, Converter={StaticResource BigMoneyConvertor}}">
+                                </TextBlock>
+                            </Grid>
+                        </ui:Card>
+                        <ui:Card Grid.Row="2" Grid.Column="2" FontSize="20">
+                            <Grid  HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left"  Text="Total Supply:"/>
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right"
+                                           Text="{Binding CoinMarket.TotalSupply, Converter={StaticResource BigMoneyConvertor}}">
+                                </TextBlock>
+                            </Grid>
+                        </ui:Card>
+                        <ui:Card Grid.Row="4" Grid.Column="2" FontSize="20">
+                            <Grid  HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Max Supply:"/>
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right"
+                                           Text="{Binding CoinMarket.MaxSupply, Converter={StaticResource BigMoneyConvertor}}">
+                                </TextBlock>
+                            </Grid>
+                        </ui:Card>
+                    </Grid>
+
+                </Grid>
+            </ui:Card>
+            <ui:Card Grid.Column="2" VerticalAlignment="Stretch" FontSize="24">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0"  Grid.Column="0"
+                               FontSize="30" FontWeight="Bold"
+                               Text="Info"/>
+                    <TextBlock Grid.Row="1" Text="Website:"></TextBlock>
+                    <ListView Grid.Row="1" Grid.Column="2"
+                              HorizontalAlignment="Left"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding CoinData.Links.Homepages, Converter={StaticResource StringArrConvert}}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              
+                             >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Uid="data">
+                                <ui:Button  Content="{Binding DataContext,Converter={StaticResource UrlConverter},
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                            Command="{Binding DataContext.NavigateToUrl,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                                            CommandParameter="{Binding DataContext,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+                                    
+                                </ui:Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    
+                    <TextBlock Grid.Row="2" Text="Explorers:" ></TextBlock>
+                    <ListView Grid.Row="2" Grid.Column="2"
+                              HorizontalAlignment="Left"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding CoinData.Links.BlockchainSites, Converter={StaticResource StringArrConvert}}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             
+                             >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Uid="data">
+                                <ui:Button  Content="{Binding DataContext,Converter={StaticResource UrlConverter},
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                            Command="{Binding DataContext.NavigateToUrl,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                                            CommandParameter="{Binding DataContext,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+
+                                </ui:Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <TextBlock Grid.Row="3" Text="Community:" ></TextBlock>
+                    <ListView Grid.Row="3" Grid.Column="2"
+                              HorizontalAlignment="Left"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding CoinData.Links.Communitity, Converter={StaticResource StringArrConvert}}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             
+                             >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Uid="data">
+                                <ui:Button  Content="{Binding DataContext,Converter={StaticResource UrlConverter},
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                            Command="{Binding DataContext.NavigateToUrl,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                                            CommandParameter="{Binding DataContext,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+
+                                </ui:Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <TextBlock Grid.Row="4" Text="Source Code:" ></TextBlock>
+                    <ListView Grid.Row="4" Grid.Column="2"
+                              HorizontalAlignment="Left"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding CoinData.Links.RepoUrls.Combined, Converter={StaticResource StringArrConvert}}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             
+                             >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Uid="data">
+                                <ui:Button  Content="{Binding DataContext,Converter={StaticResource UrlConverter},
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                            Command="{Binding DataContext.NavigateToUrl,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                                            CommandParameter="{Binding DataContext,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+
+                                </ui:Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </ui:Card>
+        </Grid>
+        <ui:Card VerticalAlignment="Top"  Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                               Margin="0,0,0,20"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Text="Markets:"/>
+                <StackPanel Grid.Row="1">
+                    <ui:DataGrid Grid.Row="1"
+                                 CanUserAddRows="False"
+                                 CanUserDeleteRows="False"
+                                 CanUserReorderColumns="False"
+                                 AutoGenerateColumns="False"
+                                 GridLinesVisibility="Horizontal"
+                                 ItemsSource="{Binding CoinData.Tickers, Mode=OneWay}"
+                        
+                                 >
+                        <behaviours:Interaction.Triggers>
+                            <behaviours:EventTrigger EventName="PreviewMouseWheel">
+                                <behaviours:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding Scroll}"/>
+                            </behaviours:EventTrigger>
+                        </behaviours:Interaction.Triggers>
+                        <ui:DataGrid.Columns>
+                            <DataGridTemplateColumn Width="300" SortMemberPath="Market.Name" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Market"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Stretch" MaxWidth="200" DataContext="{Binding Market}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="9*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"  
+                                                       Grid.Column="1"
+                                                       FontSize="20" TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="200" CanUserSort="False">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Pair"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ui:Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   Background="Transparent" BorderThickness="0"
+                                            Command="{Binding DataContext.NavigateToUrl,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ui:DataGrid}}"
+                                            CommandParameter="{Binding TradeUrl}">
+                                            <TextBlock HorizontalAlignment="Center">
+                                                <Run Text="{Binding Base}"/>/
+                                                <Run Text="{Binding Target}"/>
+                                            </TextBlock>   
+                                        </ui:Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="300" SortMemberPath="LastUsd" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Price"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="5"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Grid.Column="0"
+                                                       FontSize="20"
+                                                       Text="{Binding LastUsd, StringFormat={}{0:C}}"/>
+                                            <TextBlock  Grid.Column="2" VerticalAlignment="Center" Text="USD" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="100" SortMemberPath="Spread" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Spread"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="20"
+                                                   Text="{Binding SpreadPercent, StringFormat={}{0:F2}%}"/>
+                                      
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="300" SortMemberPath="VolumeUsd" CanUserSort="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="24h Volume"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="5"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Grid.Column="0"
+                                                       FontSize="20"
+                                                       Text="{Binding VolumeUsd, StringFormat={}{0:C}}"/>
+                                            <TextBlock  Grid.Column="2" VerticalAlignment="Center" Text="USD" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="100" SortMemberPath="TrustScore" CanUserSort="False">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock HorizontalAlignment="Center" Text="Trust Score"></TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Ellipse HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Width="20"
+                                                 Height="20"
+                                                 Fill="{Binding TrustScore}">
+
+                                        </Ellipse>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </ui:DataGrid.Columns>
+                    </ui:DataGrid>
+                </StackPanel>
+                <StackPanel Margin="0,10,0,0" Grid.Row="2"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center">
+                    <ui:Button Command="{Binding PrevCoinsPage}">
+                        <ui:SymbolIcon Symbol="ChevronLeft24"/>
+                    </ui:Button>
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="10 0" Text="{Binding Page}"></TextBlock>
+                    <ui:Button Command="{Binding NextCoinsPage}">
+                        <ui:SymbolIcon Symbol="ChevronRight24"/>
+                    </ui:Button>
+                </StackPanel>
+            </Grid>
+        </ui:Card>
+    </Grid>
+</UserControl>
