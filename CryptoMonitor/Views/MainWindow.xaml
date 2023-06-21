@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel  Grid.Column="0" Orientation="Horizontal">
                 <ui:Button VerticalAlignment="Stretch" Command="{Binding NavigateToHomePage}">
-                    <ui:SymbolIcon Symbol="Search24"/>
+                    <ui:SymbolIcon Symbol="Home24"/>
                 </ui:Button>
 
                 <ToggleButton Margin="10 0" VerticalAlignment="Stretch">
@@ -86,7 +86,7 @@
                     </ComboBox>
                     <ui:Button Grid.Column="2" VerticalAlignment="Stretch"
                             Command="{Binding GoToCoinPage}">
-                        <ui:SymbolIcon Symbol="Open28"/>
+                        <ui:SymbolIcon Symbol="Search28"/>
                     </ui:Button>
                 </Grid>
 
