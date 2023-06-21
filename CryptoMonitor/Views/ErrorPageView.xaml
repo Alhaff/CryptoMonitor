@@ -8,11 +8,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Error was caused:"></TextBlock>
-            <TextBlock Margin="10" Text="Message: "></TextBlock>
-            <TextBlock Margin="10" Text="{Binding ErrorMessage}"></TextBlock>
-            <ui:Button Command="{Binding NavigateHome}" >Go Home</ui:Button>
-        </StackPanel>  
+        <ui:Card HorizontalAlignment="Center">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       HorizontalAlignment="Center" FontSize="26"
+                       FontWeight="Bold" Text="Error was caused!"></TextBlock>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock  FontSize="26" Text="Message: "></TextBlock>
+                    <TextBlock Margin="10 0 0 0" FontSize="20"  TextWrapping="Wrap" 
+                               HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ErrorMessage}"></TextBlock>
+                </StackPanel>
+             <ui:Button Grid.Row="4" HorizontalAlignment="Center" Command="{Binding NavigateHome}" >Go Home</ui:Button>
+        </Grid>
+        </ui:Card>
     </Grid>
 </UserControl>
