@@ -10,13 +10,17 @@ namespace CryptoMonitor.Converters
 {
     public class BigMoneyValueConverter : IValueConverter
     {
+        private double  highValueBeforeConvertToGeneral = 1E20;
+        private double lowValueBeforeConvertToGeneral = .01;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+          
             if(value is double)
             {
                 var num = value as double?;
                 if (num==null) return Binding.DoNothing;
-                var str = (num > 1E10 || num < .01) ? num?.ToString("G6") : num?.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-us")).Substring(1);
+                var str = (num > highValueBeforeConvertToGeneral || 
+                           num < lowValueBeforeConvertToGeneral) ? num?.ToString("G6") : num?.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-us")).Substring(1);
                 return str;
             }
             return Binding.DoNothing;
