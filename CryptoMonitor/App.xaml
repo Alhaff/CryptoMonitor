@@ -8,13 +8,18 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ThemesDictionary Theme="Dark" x:Name="Themes"/>
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate DataType="{x:Type vms:Top10CoinViewModel}">
-                <views:Top10CoinView />
+            <DataTemplate DataType="{x:Type vms:HomePageViewModel}">
+                <views:HomePageView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:ErrorPageViewModel}">
+                <views:ErrorPageView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:CoinDataViewModel}">
+                <views:CoinDataView />
             </DataTemplate>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>
