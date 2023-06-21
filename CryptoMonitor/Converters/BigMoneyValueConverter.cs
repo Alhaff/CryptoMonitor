@@ -20,7 +20,7 @@ namespace CryptoMonitor.Converters
                 var num = value as double?;
                 if (num==null) return Binding.DoNothing;
                 var str = (num > highValueBeforeConvertToGeneral || 
-                           num < highValueBeforeConvertToGeneral) ? num?.ToString("G6") : num?.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-us")).Substring(1);
+                           num < lowValueBeforeConvertToGeneral) ? num?.ToString("G6") : num?.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-us")).Substring(1);
                 return str;
             }
             return Binding.DoNothing;
